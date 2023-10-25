@@ -9,9 +9,6 @@ export const useGgStore = defineStore("gg", {
   state: () => ({
     baseUrl: "http://localhost:3000",
   }),
-  getters: {
-    doubleCount: (state) => state.count * 2,
-  },
   actions: {
     async register(data) {
       try {
