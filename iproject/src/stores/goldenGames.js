@@ -33,15 +33,11 @@ export const useGgStore = defineStore("gg", {
             },
           }
         );
-        localStorage.access_token = login.data.token;
+        localStorage.access_token = login.data.access_token;
         this.router.push("/");
-        toast.success("Login Success", {
-          position: "top-right",
-        });
+        toast.success("Welcome to GG");
       } catch (error) {
-        toast.error(error.response.data.message, {
-          position: "top-right",
-        });
+        toast.error(error.response.data.message);
       }
     },
     async getLogin(data) {
