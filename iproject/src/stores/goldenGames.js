@@ -8,6 +8,7 @@ const toast = useToast();
 export const useGgStore = defineStore("gg", {
   state: () => ({
     baseUrl: "http://localhost:3000",
+    listGames: []
   }),
   actions: {
     async register(data) {
@@ -55,5 +56,21 @@ export const useGgStore = defineStore("gg", {
         toast.success("See you later champ");
       }
     },
+    async fetchAllFreeGames(reqPage){
+      try {
+        let page = 1
+        if(reqPage){
+          page = reqPage
+        }
+        const { data } = await axios.get(this.baseUrl + '/?page=' + page, {
+          headers: {
+            access_token: localStorage.access_token
+          }
+        })
+        this.listGames = data
+      } catch (error) {
+        toast.error(error.response.data.message)
+      }
+    }
   },
 });
