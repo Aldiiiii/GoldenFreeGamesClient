@@ -8,7 +8,10 @@ const toast = useToast();
 export const useGgStore = defineStore("gg", {
   state: () => ({
     baseUrl: "http://localhost:3000",
-    listGames: []
+    listGames: [],
+    totalPages: 0,
+    currentPage: 1,
+    showPage: []
   }),
   actions: {
     async register(data) {
@@ -56,18 +59,39 @@ export const useGgStore = defineStore("gg", {
         toast.success("See you later champ");
       }
     },
-    async fetchAllFreeGames(reqPage){
+    async fetchAllFreeGames(query){
       try {
-        let page = 1
-        if(reqPage){
-          page = reqPage
+        let addQuery = ''
+
+        query.page ? (addQuery = 'page=' + query.page) : ''
+        query.name ? (addQuery = 'name=' + query.name) : ''
+        if (query.page && query.name) {
+          addQuery = 'page=' + query.page + '&name=' + query.name
         }
-        const { data } = await axios.get(this.baseUrl + '/?page=' + page, {
+        
+        const { data } = await axios.get(this.baseUrl + '/?' + addQuery, {
           headers: {
             access_token: localStorage.access_token
           }
         })
-        this.listGames = data
+        this.listGames = data.data
+        this.totalPages = data.totalPage
+        this.currentPage = data.currentPage
+        console.log(data.currentPage)
+        console.log(data.totalPage)
+        let showPage = []
+        if(+data.currentPage > 1 && +data.currentPage < +data.totalPage ){
+          showPage.push(+data.currentPage - 1)
+          showPage.push(+data.currentPage)
+          showPage.push(+data.currentPage + 1)
+        }else if(+data.currentPage === 1) {
+          showPage = [1,2,3]
+        } else if(+data.currentPage === +data.totalPage){
+          showPage.push(+data.totalPage - 2)
+          showPage.push(+data.totalPage - 1)
+          showPage.push(+data.totalPage)
+        }
+        this.showPage = showPage
       } catch (error) {
         toast.error(error.response.data.message)
       }

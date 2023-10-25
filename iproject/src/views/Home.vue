@@ -2,21 +2,52 @@
 import { useGgStore } from "../stores/goldenGames";
 import { mapActions, mapState } from "pinia";
 import { RouterView, RouterLink } from "vue-router";
-import Card from "../components/Card.vue"
+import Card from "../components/Card.vue";
 
 export default {
-    components: {
-        Card
-    },
+  components: {
+    Card,
+  },
   methods: {
     ...mapActions(useGgStore, ["getLogout", "fetchAllFreeGames"]),
-  },
-  created() {
-    this.fetchAllFreeGames();
-  },
+
+    changePage(page) {
+      if(this.$route.query.name){
+        this.$router.push('?name='+ this.$route.query.name + '&page=' + page)
+      }else{
+        this.$router.push('?page=' + page)
+      }      
+      let name = this.$route.query.name ? this.$route.query.name : ''
+      this.fetchAllFreeGames({ page, name })
+    },
+
+    countPagination(){
+      let count = []
+      if(this.currentPage < 5){
+        for(let i = 1; i > 5; i++){
+          count.push(i)
+        }
+      }
+      return count
+    },
+
+    nextPage() {
+      let next = +this.currentPage + 1
+      return this.changePage(next)
+    },
+    previosPage() {
+      let previous = +this.currentPage - 1
+      return this.changePage(previous)
+    }
+  },  
   computed: {
-    ...mapState(useGgStore, ["listGames"]),
+    ...mapState(useGgStore, ["listGames", "currentPage", "totalPages", "showPage"]),
   },
+  mounted() {
+    let page = this.$route.query.page ? this.$route.query.page : ''
+    let name = this.$route.query.name ? this.$route.query.name : ''
+    this.fetchAllFreeGames({ page, name })
+  }
 };
 </script>
 
@@ -29,12 +60,12 @@ export default {
           <h1 class="fw-light">GoldenFreeGames</h1>
           <p class="lead text-body-secondary">Welcome to GoldenFreeGames.</p>
           <p>
-            <RouterLink to="/products" class="btn btn-dark my-2"
-              >Profile</RouterLink
+            <RouterLink to="/favourites" class="btn btn-dark my-2"
+              >Your Games</RouterLink
             >
             <span>
-              <RouterLink to="/login" class="btn btn-light my-2"
-                >Logout</RouterLink
+              <a @click.prevent="getLogout" class="btn btn-danger my-2"
+                >Logout</a
               >
             </span>
           </p>
@@ -51,20 +82,14 @@ export default {
         </div>
 
         <!-- pagination -->
-        <div class="mt-5" v-if="this.$route.path !== '/'">
+        <div class="mt-5">
           <nav aria-label="Page navigation example">
             <ul class="pagination justify-content-center">
-              <li class="page-item">
-                <a
-                  @click="previosPage"
-                  href="#"
-                  class="page-link"
-                  v-if="currentPage > 1"
-                  >Previous</a
-                >
+              <li class="page-item" :class="currentPage == 1 ? 'disabled' : ''">
+                <a @click="previosPage" href="#" class="page-link">Previous</a>
               </li>
-              <li v-for="page in totalPages" class="page-item">
-                <a @click="changePage(page)" class="page-link" href="#">{{
+              <li v-for="page in showPage" class="page-item">
+                <a @click="changePage(page)" class="page-link" :class="+currentPage === +page ? 'active' : '' " href="#">{{
                   page
                 }}</a>
               </li>
@@ -86,7 +111,7 @@ export default {
 
   <footer class="text-body-secondary py-5">
     <div class="container">
-      <p class="float-end mb-1" v-if="this.$route.path !== '/'">
+      <p class="float-end mb-1">
         <a href="#">Back to top</a>
       </p>
       <p class="mb-1">

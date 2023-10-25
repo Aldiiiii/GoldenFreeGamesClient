@@ -73,12 +73,11 @@ export default {
               View detail
             </button>
             <button
-              v-if="this.$route.path !== '/wishlist'"
               @click.prevent="handleAddWishlist(id)"
               type="button"
               class="btn btn-sm btn-outline-secondary"
             >
-              🖤 Wishlist
+              Add to Collection
             </button>
           </div>
           <small class="text-body-secondary">{{ platform }}</small>
