@@ -7,7 +7,8 @@ const toast = useToast();
 
 export const useGgStore = defineStore("gg", {
   state: () => ({
-    baseUrl: "http://localhost:3000",
+    // baseUrl: "http://localhost:3000",
+    baseUrl: "https://gg.amrinaldi.site",
     listGames: [],
     totalPages: 0,
     currentPage: 1,
