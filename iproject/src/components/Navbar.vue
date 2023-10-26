@@ -88,7 +88,7 @@ export default {
       <div class="offcanvas-body p-4 pt-0 p-lg-0" id="navbarNav">
         <ul class="navbar-nav flex-row flex-wrap bd-navbar-nav">
           <li class="nav-item col-6 col-lg-auto active">
-            <RouterLink class="nav-link" to="/">Home</RouterLink>
+            <RouterLink v-if="this.$route.path !== '/'" class="nav-link" to="/">Home</RouterLink>
           </li>
           <!-- <li class="nav-item col-6 col-lg-auto">
             <RouterLink class="nav-link" to="/products">Product</RouterLink>
@@ -96,11 +96,11 @@ export default {
           <li class="nav-item col-6 col-lg-auto">
             <RouterLink class="nav-link" to="/wishlist">Wishlist</RouterLink>
           </li> -->
-          <li class="nav-item col-6 col-lg-auto">
+          <li v-if="this.$route.path !== '/'" class="nav-item col-6 col-lg-auto">
             <a class="nav-link" @click.prevent="getLogout">Logout</a>
           </li>
           <ul class="navbar-nav flex-row flex-wrap ms-md-auto">
-            <li>
+            <!-- <li>
               <form
                 @submit.prevent="handleSearch"
                 class="form-inline"
@@ -120,7 +120,7 @@ export default {
                   Search
                 </button>
               </form>
-            </li>
+            </li> -->
           </ul>
           <ul>
             <li>
@@ -158,17 +158,6 @@ export default {
       ></button>
     </div>
     <div class="offcanvas-body">
-      <!-- <form @submit.prevent="onSubmit">
-        <input v-model="value" />
-
-        <button type="submit" :disabled="isLoading">Submit</button>
-        <button @click="connect()">Connect</button>
-        <button @click="disconnect()">Disconnect</button>
-        <p>isloading : {{ isLoading }}</p>
-        <p>value: {{ value }}</p>
-        <p>{{ fooEvents }}</p>
-      </form>
-      <p>-------form-------</p> -->
       <ul id="messages">
         <li v-for="msg in fooEvents">{{ msg }}</li>
       </ul>

@@ -1,6 +1,7 @@
 <script>
 import { useGgStore } from '../stores/goldenGames';
 import { mapActions } from 'pinia';
+import { RouterLink } from 'vue-router';
 
 export default {
   data() {
@@ -85,6 +86,7 @@ const callback = (response) => {
         <div style="display: flex; justify-content: center; margin-left: 18px;">
           <GoogleLogin class="btn w-100 py-2" :callback="callback"/>
         </div>
+        <RouterLink style="display: flex; justify-content: center;" to="/register">Create Account</RouterLink>
         <p class="mt-5 mb-3 text-body-secondary">&copy; 2023</p>
       </form>
     </main>

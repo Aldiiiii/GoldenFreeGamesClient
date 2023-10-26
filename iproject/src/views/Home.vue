@@ -60,8 +60,8 @@ export default {
           <h1 class="fw-light">GoldenFreeGames</h1>
           <p class="lead text-body-secondary">Welcome to GoldenFreeGames.</p>
           <p>
-            <RouterLink to="/favourites" class="btn btn-dark my-2"
-              >Your Games</RouterLink
+            <RouterLink to="/collections" class="btn btn-dark my-2"
+              >Your Collections</RouterLink
             >
             <span>
               <a @click.prevent="getLogout" class="btn btn-danger my-2"

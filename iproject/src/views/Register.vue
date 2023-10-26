@@ -1,6 +1,7 @@
 <script>
 import { useGgStore } from "../stores/goldenGames";
 import { mapActions } from "pinia";
+import { RouterLink } from "vue-router";
 
 export default {
   data() {
@@ -88,6 +89,8 @@ export default {
         </div>
 
         <button class="btn btn-dark w-100 py-2" type="submit">Sign up</button>
+        <RouterLink style="display: flex; justify-content: center; margin-top: 15px;" to="/login">Already have account</RouterLink>
+
         <p class="mt-5 mb-3 text-body-secondary">&copy; 2023</p>
       </form>
     </main>

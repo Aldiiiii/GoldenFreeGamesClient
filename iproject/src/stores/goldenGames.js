@@ -11,7 +11,9 @@ export const useGgStore = defineStore("gg", {
     listGames: [],
     totalPages: 0,
     currentPage: 1,
-    showPage: []
+    showPage: [],
+    collections: [],
+    detailGame: {}
   }),
   actions: {
     async register(data) {
@@ -92,6 +94,56 @@ export const useGgStore = defineStore("gg", {
           showPage.push(+data.totalPage)
         }
         this.showPage = showPage
+      } catch (error) {
+        toast.error(error.response.data.message)
+      }
+    },
+    async addCollections(game){
+      try {
+        const add  = await axios.post(this.baseUrl + '/collections', game, {
+          headers: {
+            access_token: localStorage.access_token
+          }
+        })
+        this.router.push('/collections')
+        toast.success(add.data.title + `added to collections`)
+      } catch (error) {
+        toast.error(error.response.data.message);
+      }
+    },
+    async fetchCollections(){
+      try {
+        const { data } = await axios.get(this.baseUrl + '/collections', {
+          headers: {
+            access_token: localStorage.access_token
+          }
+        })
+        this.collections = data
+      } catch (error) {
+        toast.error(error.response.data.message);
+      }
+    },
+    async changeStatus(data){
+      try {
+        const update = await axios.patch(this.baseUrl + '/collections', data, {
+          headers: {
+            access_token: localStorage.access_token
+          }
+        })
+        toast.success("Status updated")
+      } catch (error) {
+        toast.error(error.response.data.message)
+      }
+    },
+    async gamesById(id){
+      try {
+        const { data } = await axios.get(this.baseUrl + '/collections/' + id, {
+          headers: {
+            access_token: localStorage.access_token
+          }
+        })
+        this.detailGame = data
+        this.router.push('/collections/' + id)
       } catch (error) {
         toast.error(error.response.data.message)
       }
